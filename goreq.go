@@ -43,6 +43,7 @@ type Request struct {
 	CookieJar         http.CookieJar
 	ShowDebug         bool
 	OnBeforeRequest   func(goreq *Request, httpreq *http.Request)
+	Transport         *http.Transport
 }
 
 type compression struct {
@@ -284,6 +285,10 @@ func (r Request) Do() (*Response, error) {
 			Transport: transport,
 			Jar:       r.CookieJar,
 		}
+	}
+
+	if r.Transport != nil {
+		client.Transport = r.Transport
 	}
 
 	if r.Proxy != "" {
